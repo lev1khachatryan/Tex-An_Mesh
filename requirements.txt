@@ -1,0 +1,10 @@
+matplotlib
+numpy
+sklearn
+pandas
+opencv
+scipy
+tqdm
+argparse
+tensorflow
+pytorch
