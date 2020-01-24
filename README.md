@@ -1,5 +1,5 @@
-<p align="center">
-  <b># Photo Wake-Up: 3D Character Animation from a Single Photo</b><br>
+# <p align="center">
+  <b>Photo Wake-Up: 3D Character Animation from a Single Photo</b><br>
   <br><br>
 </p>
 
