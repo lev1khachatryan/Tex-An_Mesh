@@ -58,6 +58,7 @@ The final step is to texture the reconstructed 3D model. To texture the front me
 Texturing the back of the body is more difficult, as we have no direct observation of it. One approach is to simply mirror the front texture onto the back. This mirrored texturing produces reasonable results in some cases (e.g., arms), but undesirable results in others (face appears on the back of the head). To address this problem, we are allowed to choose between mirrored texturing or label-driven texture synthesis – “texture-by-numbers” – on a part-by-part basis. Fig. 8 illustrates the latter approach. Starting from the original body part label map, we can apply new color labels to the source (frontal) image, and optionally to the back image. We then synthesize texture for the back, restricted to draw from regions with the same label. Finally, we apply Poisson blending to back texture when stitching it with the front texture.
 
 ![Alt text](https://github.com/lev1khachatryan/Photo_Wake-Up/blob/master/doc/_assets/TexturingBack.png)
+
 **Figure 8**: We transform the back-texture construction into a texture-by-numbers problem. We first modify the body label map by labeling undesired region with different colors (i.e., face and shirt logo) to create the source label map. In this example, we then use the original body label map as the target label map for the back; thus, the constrained texture synthesis will not use pixels covered by the new labels when creating the back texture, so that the face and logo do not appear on the back.
 
 
