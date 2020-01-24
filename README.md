@@ -18,7 +18,7 @@ The overall system works as follows (Fig. 2): First apply state-of-the-art algor
 Mask R-CNN adopts the same two-stage procedure, with an identical first stage (which is RPN). In the second stage, in parallel to predicting the class and box offset, Mask R-CNN also outputs a binary mask for each RoI (region of interest).
 
 ![Alt text](https://github.com/lev1khachatryan/Photo_Wake-Up/blob/master/doc/_assets/mask%20r-cnn.png)
-**Figure 3*. The Mask R-CNN. Key element is RoIAlign which is the main missing piece of Fast/Faster R-CNN.
+**Figure 3**. The Mask R-CNN. Key element is RoIAlign which is the main missing piece of Fast/Faster R-CNN.
 
 ***Dense CRF***: As we mentioned above, person segmentation is refined using dense CRF. A common approach of pixel-level models for segmentation/detection (as Mask R-CNN does) is to pose problem as maximum a posteriori (MAP) inference in a conditional random field (CRF) defined over pixels or image patches. The CRF potentials incorporate smoothness terms that maximize label agreement between similar pixels, and can integrate more elaborate terms that model contextual relationships between object classes.
 
