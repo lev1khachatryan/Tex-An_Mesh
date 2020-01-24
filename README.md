@@ -29,6 +29,18 @@ Basic CRF models are composed of unary potentials on individual pixels or image 
 
 ***PatchMatch***: Used to fill in the holes in the person after being segmented. The core of the system is the algorithm for computing patch correspondences. We define a nearest-neighbor field (NNF) as a function <img src="https://render.githubusercontent.com/render/math?math=f : A \to R^{2}">  of offsets, defined over all possible patch coordinates (locations of patch centers) in image 𝐴, for some distance function of two patches 𝐷. Given patch coordinate 𝑎 in image 𝐴 and its corresponding nearest neighbor 𝑏 in image 𝐵, 𝑓(𝑎) is simply 𝑏 − 𝑎 . We refer to the values of 𝑓 as offsets, and they are stored in an array whose dimensions are those of A.
 
+A randomized algorithm for computing an approximate NNF is used. The key insights that motivate this algorithm are that we search in the space of possible offsets, that adjacent offsets search cooperatively, and that even a random offset is likely to be a good guess for many patches over a large image.
+
+![Alt text](https://github.com/lev1khachatryan/Photo_Wake-Up/blob/master/doc/_assets/PatchMatch.png)
+**Figure 5**: Phases of the randomized nearest neighbor algorithm: (a) patches initially have random assignments; (b) the blue patch checks above/green and left/red neighbors to see if they will improve the blue mapping, propagating good matches; (c) the patch searches randomly for improvements in concentric neighborhoods.
+
+The algorithm has three main components, illustrated in Figure 5. Initially, the nearest-neighbor field is filled with either random offsets or some prior information. Next, an iterative update process is applied to the NNF, in which good patch offsets are propagated to adjacent pixels, followed by random search in the neighborhood of the best offset found so far.
+
+***Convolutional Pose Machines (CPMs)***: Used for the task of articulated pose estimation. CPMs consist of a sequence of convolutional networks that repeatedly produce 2D belief maps for the location of each part. At each stage in a CPM, image features and the belief maps produced by the previous stage are used as input. The belief maps provide the subsequent stage an expressive non-parametric encoding of the spatial uncertainty of location for each part, allowing the CPM to learn rich image-dependent spatial models of the relationships between parts. Instead of explicitly parsing such belief maps either using graphical models or specialized post-processing steps, we learn convolutional networks that directly operate on intermediate belief maps and learn implicit image-dependent spatial models of the relationships between parts. The overall proposed multistage architecture is fully differentiable and therefore can be trained in an end-to-end fashion using backpropagation.
+
+At a particular stage in the CPM, the spatial context of part beliefs provides strong disambiguating cues to a subsequent stage. As a result, each stage of a CPM produces belief maps with increasingly refined estimates for the locations of each part (see Figure 6). In order to capture long range interactions between parts, the design of the network in each stage of our sequential prediction framework is motivated by the goal of achieving a large receptive field on both the image and the belief maps.
+
+![Alt text](https://github.com/lev1khachatryan/Photo_Wake-Up/blob/master/doc/_assets/cpm.png)
 
 
 
