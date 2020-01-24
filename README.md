@@ -62,4 +62,31 @@ Texturing the back of the body is more difficult, as we have no direct observati
 
 **Figure 8**: We transform the back-texture construction into a texture-by-numbers problem. We first modify the body label map by labeling undesired region with different colors (i.e., face and shirt logo) to create the source label map. In this example, we then use the original body label map as the target label map for the back; thus, the constrained texture synthesis will not use pixels covered by the new labels when creating the back texture, so that the face and logo do not appear on the back.
 
+<br>
+<br>
+<br>
+<br>
 
+## My Running Environment
+<b>Hardware</b>
+- CPU: Intel® Core™ i7-8700X (3.70GHz x 12 cores, 24 threads)
+- GPU: NVIDIA® GeForce GTX 1080/PCle/SSE2
+- Memory: 62GB GiB
+- OS type: 64-bit
+- Disk: 1.2 TB
+
+<b>Operating System</b>
+- ubuntu 16.04 LTS
+
+<b>Software</b>
+- Python 3.6.2
+- NumPy 1.13.1
+- TensorFlow 1.4.0
+- PIL 6.0.0
+- SciPy 1.1.0
+- CUDA 8.0.61
+- cuDNN 6.0.21
+
+## Contact
+If there's some suggestions you would like to give or if you're just feeling social,
+feel free to [email](mailto:levon.khachatryan.1996.db@gmail.com) me or connect with me on [LinkedIn](https://www.linkedin.com/in/levonkhachatryan/).
