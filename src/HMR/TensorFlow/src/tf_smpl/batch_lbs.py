@@ -18,7 +18,8 @@ def batch_skew(vec, batch_size=None):
 
     returns N x 3 x 3. Skew_sym version of each matrix.
     """
-    with tf.name_scope("batch_skew", [vec]):
+    # with tf.name_scope("batch_skew", [vec]):
+    with tf.name_scope("batch_skew"):
         if batch_size is None:
             batch_size = vec.shape.as_list()[0]
         col_inds = tf.constant([1, 2, 3, 5, 6, 7])
@@ -43,7 +44,8 @@ def batch_rodrigues(theta, name=None):
     """
     Theta is N x 3
     """
-    with tf.name_scope(name, "batch_rodrigues", [theta]):
+    # with tf.name_scope(name, "batch_rodrigues", [theta]):
+    with tf.name_scope(name, "batch_rodrigues"):
         batch_size = theta.shape.as_list()[0]
 
         # angle = tf.norm(theta, axis=1)
@@ -77,7 +79,8 @@ def batch_lrotmin(theta, name=None):
     Returns
       diff_vec : `Tensor`: N x 207 rotation matrix of 23=(K-1) joints with identity subtracted.,
     """
-    with tf.name_scope(name, "batch_lrotmin", [theta]):
+    # with tf.name_scope(name, "batch_lrotmin", [theta]):
+    with tf.name_scope(name, "batch_lrotmin"):
         with tf.name_scope("ignore_global"):
             theta = theta[:, 3:]
 
@@ -104,7 +107,8 @@ def batch_global_rigid_transformation(Rs, Js, parent, rotate_base=False):
       new_J : `Tensor`: N x 24 x 3 location of absolute joints
       A     : `Tensor`: N x 24 4 x 4 relative joint transformations for LBS.
     """
-    with tf.name_scope("batch_forward_kinematics", [Rs, Js]):
+    # with tf.name_scope("batch_forward_kinematics", [Rs, Js]):
+    with tf.name_scope("batch_forward_kinematics"):
         N = Rs.shape[0].value
         if rotate_base:
             print('Flipping the SMPL coordinate frame!!!!')
@@ -120,7 +124,8 @@ def batch_global_rigid_transformation(Rs, Js, parent, rotate_base=False):
 
         def make_A(R, t, name=None):
             # Rs is N x 3 x 3, ts is N x 3 x 1
-            with tf.name_scope(name, "Make_A", [R, t]):
+            # with tf.name_scope(name, "Make_A", [R, t]):
+            with tf.name_scope(name, "Make_A"):
                 R_homo = tf.pad(R, [[0, 0], [0, 1], [0, 0]])
                 t_homo = tf.concat([t, tf.ones([N, 1, 1])], 1)
                 return tf.concat([R_homo, t_homo], 2)

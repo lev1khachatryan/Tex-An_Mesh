@@ -56,7 +56,7 @@ flags.DEFINE_string(
 DATA_DIR = '/scratch1/projects/tf_datasets/'
 
 flags.DEFINE_string('data_dir', DATA_DIR, 'Where to save training models')
-flags.DEFINE_string('log_dir', 'logs', 'Where to save training models')
+# flags.DEFINE_string('log_dir', 'logs', 'Where to save training models')
 flags.DEFINE_string('model_dir', None, 'Where model will be saved -- filled automatically')
 flags.DEFINE_integer('log_img_step', 100, 'How often to visualize img during training')
 flags.DEFINE_integer('epoch', 100, '# of epochs to train')

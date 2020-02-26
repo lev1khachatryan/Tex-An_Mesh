@@ -37,7 +37,8 @@ def Encoder_resnet(x, is_training=True, weight_decay=0.001, reuse=False):
     - variables: tf variables
     """
     from tensorflow.contrib.slim.python.slim.nets import resnet_v2
-    with tf.name_scope("Encoder_resnet", [x]):
+    # with tf.name_scope("Encoder_resnet", [x]):
+    with tf.name_scope("Encoder_resnet"):
         with slim.arg_scope(
                 resnet_v2.resnet_arg_scope(weight_decay=weight_decay)):
             net, end_points = resnet_v2.resnet_v2_50(
