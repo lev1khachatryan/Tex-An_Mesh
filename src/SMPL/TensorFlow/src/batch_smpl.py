@@ -141,5 +141,3 @@ class SMPL(object):
                 return verts, joints, Rs
             else:
                 return joints
-
-
