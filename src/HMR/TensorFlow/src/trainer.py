@@ -74,8 +74,7 @@ class HMRTrainer(object):
         # First make sure data_format is right
         if self.data_format == 'NCHW':
             # B x H x W x 3 --> B x 3 x H x W
-            data_loader['image'] = tf.transpose(data_loader['image'],
-                                                [0, 3, 1, 2])
+            data_loader['image'] = tf.transpose(data_loader['image'],[0, 3, 1, 2])
 
         self.image_loader = data_loader['image']
         self.kp_loader = data_loader['label']
