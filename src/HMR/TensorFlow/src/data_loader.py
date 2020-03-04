@@ -124,8 +124,7 @@ class DataLoader(object):
         datasets_yes3d = [d for d in self.datasets if d in _3D_DATASETS]
 
         files_no3d = data_utils.get_all_files(self.dataset_dir, datasets_no3d)
-        files_yes3d = data_utils.get_all_files(self.dataset_dir,
-                                               datasets_yes3d)
+        files_yes3d = data_utils.get_all_files(self.dataset_dir,datasets_yes3d)
 
         # Make sure we have dataset with 3D.
         if len(files_yes3d) == 0:
