@@ -123,8 +123,7 @@ class SMPL(object):
                 batch_rodrigues(tf.reshape(theta, [-1, 3])), [-1, 24, 3, 3])
             with tf.name_scope("lrotmin"):
                 # Ignore global rotation.
-                pose_feature = tf.reshape(Rs[:, 1:, :, :] - tf.eye(3),
-                                          [-1, 207])
+                pose_feature = tf.reshape(Rs[:, 1:, :, :] - tf.eye(3),[-1, 207])
 
             # (N x 207) x (207, 20670) -> N x 6890 x 3
             v_posed = tf.reshape(
@@ -158,5 +157,3 @@ class SMPL(object):
                 return verts, joints, Rs
             else:
                 return joints
-
-
