@@ -104,13 +104,12 @@ class DataLoader(object):
     def get_loader_w3d(self):
         """
         Similar to get_loader, but outputs are:
-          image_batch: batched images as per data_format
-          label_batch: batched keypoint labels N x K x 3
-          label3d_batch: batched keypoint labels N x (216 + 10 + 42)
+          image: batched images as per data_format N x H x W x 3 (which will be converted to NCHW)
+          label: batched keypoint labels N x K x 3
+          label3d: batched keypoint labels N x (216 + 10 + 42)
                          216=24*3*3 pose, 10 shape, 42=14*3 3D joints
                          (3D datasets only have 14 joints annotated)
-          has_gt3d_batch: batched indicator for
-                          existence of [3D joints, 3D SMPL] labels N x 2 - bool
+          has3d: batched indicator for existence of [3D joints, 3D SMPL] labels N x 2 - bool
                           Note 3D SMPL is only available for H3.6M.
 
 
