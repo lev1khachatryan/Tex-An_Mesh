@@ -21,45 +21,53 @@ class SMPL(object):
         # -- Load SMPL params --
         with open(pkl_path, 'rb') as f:
             dd = pickle.load(f, encoding='latin1')
+
         # Mean template vertices
         self.v_template = tf.constant(
             dd['v_template'],
             name='v_template',
             dtype=dtype)
-        # Size of mesh [Number of vertices, 3]
+
+        # Size of mesh [Number of vertices (6890) x 3]
         self.size = [self.v_template.shape[0].value, 3]
+
+        # Size of beta [10]
         self.num_betas = dd['shapedirs'].shape[-1]
-        # Shape blend shape basis: 6980 x 3 x 10
-        # reshaped to 6980*3 x 10, transposed to 10x6980*3
+
+        # Shape blend shape basis: [6980 x 3 x 10]
+        # reshaped to [6980*3 x 10], transposed to [10 x 6980*3]
         shapedir = np.reshape(
             dd['shapedirs'], [-1, self.num_betas]).T
         self.shapedirs = tf.constant(
-            shapedir, name='shapedirs', dtype=dtype)
+            shapedir, 
+            name='shapedirs', 
+            dtype=dtype)
 
-        # Regressor for joint locations given shape - 6890 x 24
+        # Regressor for joint locations given shape - [6890 x 24]
         self.J_regressor = tf.constant(
             dd['J_regressor'].T.todense(),
             name="J_regressor",
             dtype=dtype)
 
-        # Pose blend shape basis: 6890 x 3 x 207, reshaped to 6890*30 x 207
+        # Pose blend shape basis: [6890 x 3 x 207], reshaped to [6890*3 x 207]
         num_pose_basis = dd['posedirs'].shape[-1]
-        # 207 x 20670
         posedirs = np.reshape(
             dd['posedirs'], [-1, num_pose_basis]).T
         self.posedirs = tf.constant(
-            posedirs, name='posedirs', dtype=dtype)
+            posedirs, 
+            name='posedirs', 
+            dtype=dtype)
 
         # indices of parents for each joints
         self.parents = dd['kintree_table'][0].astype(np.int32)
 
-        # LBS weights
+        # LBS weights: [6890 x 24]
         self.weights = tf.constant(
             dd['weights'],
             name='lbs_weights',
             dtype=dtype)
 
-        # This returns 19 keypoints: 6890 x 19
+        # This returns 19 keypoints: [6890 x 19]
         self.joint_regressor = tf.constant(
             dd['cocoplus_regressor'].T.todense(),
             name="cocoplus_regressor",
@@ -89,46 +97,58 @@ class SMPL(object):
             num_batch = tf.shape(beta)[0]
 
             # 1. Add shape blend shapes
-            # (N x 10) x (10 x 6890*3) = N x 6890 x 3
+            # [[N x 10] x [10 x 6890*3]] = [N x 6890*3], reshaped to [N x 6890 x 3]
             v_shaped = tf.reshape(
                 tf.matmul(beta, self.shapedirs, name='shape_bs'),
                 [-1, self.size[0], self.size[1]]) + self.v_template
 
-            # 2. Infer shape-dependent joint locations.
+
+            # 2. Infer shape-dependent joint locations. J is [N, 6890, 3]
             Jx = tf.matmul(v_shaped[:, :, 0], self.J_regressor)
             Jy = tf.matmul(v_shaped[:, :, 1], self.J_regressor)
             Jz = tf.matmul(v_shaped[:, :, 2], self.J_regressor)
             J = tf.stack([Jx, Jy, Jz], axis=2)
 
+
             # 3. Add pose blend shapes
-            # N x 24 x 3 x 3
+            # [N x 24 x 3 x 3]
             Rs = tf.reshape(
-                batch_rodrigues(tf.reshape(theta, [-1, 3])), [-1, 24, 3, 3])
+                batch_rodrigues(tf.reshape(theta, [-1, 3])), 
+                							[-1, 24, 3, 3])
+
             with tf.variable_scope("lrotmin"):
-                # Ignore global rotation.
+                # Ignore global rotation. reshaped to [N, 207]
                 pose_feature = tf.reshape(Rs[:, 1:, :, :] - tf.eye(3),
                                           [-1, 207])
 
-            # (N x 207) x (207, 20670) -> N x 6890 x 3
+            # [[N x 207] x [207, 20670]] -> [N x 6890 x 3]
             v_posed = tf.reshape(
                 tf.matmul(pose_feature, self.posedirs),
                 [-1, self.size[0], self.size[1]]) + v_shaped
+
 
             #4. Get the global joint location
             self.J_transformed, A = batch_global_rigid_transformation(Rs, J, self.parents)
 
             # 5. Do skinning:
-            # W is N x 6890 x 24
+            # # weights is [6890, 24], W is [N x 6890 x 24]
             W = tf.reshape(
                 tf.tile(self.weights, [num_batch, 1]), [num_batch, -1, 24])
-            # (N x 6890 x 24) x (N x 24 x 16)
+
+            # [[N x 6890 x 24] x [N x 24 x 16]] -> [N x 6890 x 16]
+            # reshaped to [N x 6890 x 4 x 4]
             T = tf.reshape(
                 tf.matmul(W, tf.reshape(A, [num_batch, 24, 16])),
                 [num_batch, -1, 4, 4])
+
+            # [N x 6890 x 3] -> [N x 6890 x 4] (homogeneous matrix)
             v_posed_homo = tf.concat(
                 [v_posed, tf.ones([num_batch, v_posed.shape[1], 1])], 2)
+
+            # [[N x 6890 x 4 x 4], [N x 6890 x 4 x 1]] -> [N x 6890 x 4 x 1]
             v_homo = tf.matmul(T, tf.expand_dims(v_posed_homo, -1))
 
+            # [N x 6890 x 4 x 1] -> [N x 6890 x 3]
             verts = v_homo[:, :, :3, 0]
 
             # Get cocoplus or lsp joints:
