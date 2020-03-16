@@ -83,44 +83,7 @@ def visualize(img, proc_param, joints, verts, cam, img_path):
     # cv2.imshow('Depth Map',rend_img_vp2)        
     # cv2.waitKey(0)
 
-    # cv2.destroyAllWindows()      
-
-    # import matplotlib.pyplot as plt
-
-    # plt.ion()
-
-    # plt.figure(1)
-    # plt.clf()
-    # plt.subplot(231)
-    # plt.imshow(img)
-    # plt.title('input')
-    # plt.axis('off')
-    # plt.subplot(232)
-    # plt.imshow(skel_img)
-    # plt.title('joint projection')
-    # plt.axis('off')
-    # plt.subplot(233)
-    # plt.imshow(rend_img_overlay)
-    # plt.title('3D Mesh overlay')
-    # plt.axis('off')
-    # plt.subplot(234)
-    # plt.imshow(rend_img)
-    # plt.title('3D mesh')
-    # plt.axis('off')
-    # plt.subplot(235)
-    # plt.imshow(rend_img_vp1)
-    # plt.title('diff vp')
-    # plt.axis('off')
-    # plt.subplot(236)
-    # plt.imshow(rend_img_vp2)
-    # plt.title('diff vp')
-    # plt.axis('off')
-    # plt.draw()
-    # plt.show()
-
-
-    # import ipdb
-    # ipdb.set_trace()
+    # cv2.destroyAllWindows()
 
 
 def preprocess_image(img_path, json_path=None):
