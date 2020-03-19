@@ -37,7 +37,8 @@ def Encoder_resnet(x, is_training=True, weight_decay=0.001, reuse=False):
     - variables: tf variables
     """
     from tensorflow.contrib.slim.python.slim.nets import resnet_v2
-    with tf.name_scope("Encoder_resnet", [x]):
+    # with tf.name_scope("Encoder_resnet", [x]):
+    with tf.name_scope("Encoder_resnet"):
         with slim.arg_scope(
                 resnet_v2.resnet_arg_scope(weight_decay=weight_decay)):
             net, end_points = resnet_v2.resnet_v2_50(
@@ -139,7 +140,7 @@ def Discriminator_separable_rotations(
         with tf.variable_scope("D") as scope:
             with slim.arg_scope(
                 [slim.conv2d, slim.fully_connected],
-                    weights_regularizer=slim.l2_regularizer(weight_decay)):
+                weights_regularizer=slim.l2_regularizer(weight_decay)):
                 with slim.arg_scope([slim.conv2d], data_format=data_format):
                     poses = slim.conv2d(poses, 32, [1, 1], scope='D_conv1')
                     poses = slim.conv2d(poses, 32, [1, 1], scope='D_conv2')
@@ -160,6 +161,7 @@ def Discriminator_separable_rotations(
                         scope="shape_fc1")
                     shape_out = slim.fully_connected(
                         shapes, 1, activation_fn=None, scope="shape_final")
+                    
                     """ Compute joint correlation prior!"""
                     nz_feat = 1024
                     poses_all = slim.flatten(poses, scope='vectorize')
