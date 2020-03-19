@@ -31,7 +31,7 @@ SMPL_FACE_PATH = osp.join(curr_path, '../src/tf_smpl', 'smpl_faces.npy')
 PRETRAINED_MODEL = osp.join(model_dir, 'model.ckpt-667589')
 
 flags.DEFINE_string('smpl_model_path', SMPL_MODEL_PATH,
-                    'path to the neurtral smpl model')
+                    'path to the neutral smpl model')
 flags.DEFINE_string('smpl_face_path', SMPL_FACE_PATH,
                     'path to smpl mesh faces (for easy rendering)')
 flags.DEFINE_string('load_path', None, 'path to trained model')
@@ -56,7 +56,7 @@ flags.DEFINE_string(
 DATA_DIR = '/scratch1/projects/tf_datasets/'
 
 flags.DEFINE_string('data_dir', DATA_DIR, 'Where to save training models')
-flags.DEFINE_string('log_dir', 'logs', 'Where to save training models')
+# flags.DEFINE_string('log_dir', 'logs', 'Where to save training models')
 flags.DEFINE_string('model_dir', None, 'Where model will be saved -- filled automatically')
 flags.DEFINE_integer('log_img_step', 100, 'How often to visualize img during training')
 flags.DEFINE_integer('epoch', 100, '# of epochs to train')
