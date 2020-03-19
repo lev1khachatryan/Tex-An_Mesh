@@ -22,6 +22,7 @@ from __future__ import print_function
 import sys
 from absl import flags
 import numpy as np
+import json
 
 import skimage.io as io
 import tensorflow as tf
@@ -129,6 +130,10 @@ def main(img_path, json_path=None):
 
     visualize(img, proc_param, joints[0], verts[0], cams[0])
 
+    # print(theta)
+    # theta_out = theta.tolist()
+    # with open('results/HMR_value_out.json', 'w') as outfile:
+    # 	json.dump([theta_out], outfile)
 
 if __name__ == '__main__':
     config = flags.FLAGS
