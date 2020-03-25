@@ -542,7 +542,6 @@ class HMRTrainer(object):
                     "summary": self.summary_op_always,
                     "step": self.global_step,
                     "e_loss": self.e_loss,
-                    # The meat
                     "e_opt": self.e_opt,
                     "loss_kp": self.e_loss_kp
                 }
