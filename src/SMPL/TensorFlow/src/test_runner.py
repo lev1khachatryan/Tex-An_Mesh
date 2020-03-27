@@ -1,6 +1,3 @@
-#!/usr/bin/python3
-# -*- encoding: utf-8 -*-
-
 import sys
 import os
 import tensorflow as tf
