@@ -33,8 +33,11 @@ def process_img(img, msk, bbox=None):
         img = cv2.copyMakeBorder(img,0,cy+hh-h,0,0,cv2.BORDER_CONSTANT,value=[0,0,0])    
         msk = cv2.copyMakeBorder(msk,0,cy+hh-h,0,0,cv2.BORDER_CONSTANT,value=0)    
 
-    img = img[cy-hh:(cy+hh),cx-dw:cx+dw,:]
-    msk = msk[cy-hh:(cy+hh),cx-dw:cx+dw]
+    # img = img[cy-hh:(cy+hh),cx-dw:cx+dw,:]
+    # msk = msk[cy-hh:(cy+hh),cx-dw:cx+dw]
+
+    img = img[cy+hh-h:(cy+hh),cx-dw:cx+dw,:]
+    msk = msk[cy+hh-h:(cy+hh),cx-dw:cx+dw]
 
     dw = img.shape[0] - img.shape[1]
     if dw != 0:
