@@ -22,6 +22,7 @@ from __future__ import print_function
 import sys
 from absl import flags
 import numpy as np
+import json
 
 import skimage.io as io
 import tensorflow as tf
@@ -32,7 +33,7 @@ from src.util import openpose as op_util
 import src.config
 from src.RunModel import RunModel
 
-flags.DEFINE_string('img_path', 'data/im1963.jpg', 'Image to run')
+flags.DEFINE_string('img_path', 'inference/test.png', 'Image to run')
 flags.DEFINE_string(
     'json_path', None,
     'If specified, uses the openpose output to crop the image.')
@@ -85,6 +86,7 @@ def visualize(img, proc_param, joints, verts, cam):
     plt.title('diff vp')
     plt.axis('off')
     plt.draw()
+    plt.savefig('./results/result_hmr.png')
     plt.show()
     # import ipdb
     # ipdb.set_trace()
@@ -130,6 +132,11 @@ def main(img_path, json_path=None):
     # shape is 10D shape coefficients of SMPL
     joints, verts, cams, joints3d, theta = model.predict(
         input_img, get_theta=True)
+
+    print(theta)
+    theta_out = theta.tolist()
+    with open('results/HMR_value_out.json', 'w') as outfile: 
+	    json.dump([theta_out], outfile)
 
     visualize(img, proc_param, joints[0], verts[0], cams[0])
 
