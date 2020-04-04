@@ -44,7 +44,8 @@ def visualize(img, proc_param, joints, verts, cam, img_path):
     cam_for_render, vert_shifted, joints_orig = vis_util.get_original(
         proc_param, verts, cam, joints, img_size=img.shape[:2])
 
-    folder = '/'.join(img_path.split('/')[0:-1])
+    # folder = '/'.join(img_path.split('/')[0:-1])
+    folder = './results'
     print("FOLDER!!!!!!!!!!!")
     print(folder)
 
@@ -162,10 +163,9 @@ def main(img_path, json_path=None):
 
     visualize(img, proc_param, joints[0], verts[0], cams[0], img_path)
 
-    #print(theta)
     theta_out = theta.tolist()
-    with open('results/HMR_value_out.json', 'w') as outfile: 
-	    json.dump([theta_out], outfile)
+    with open('results/PhotoWakeUpDepthMaps.json', 'w') as outfile: 
+        json.dump([theta_out], outfile)
 
 if __name__ == '__main__':
     config = flags.FLAGS

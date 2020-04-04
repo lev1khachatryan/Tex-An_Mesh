@@ -40,7 +40,7 @@ from src.util import openpose as op_util
 import src.config
 from src.RunModel import RunModel
 
-flags.DEFINE_string('img_path', 'data/im1963.jpg', 'Image to run')
+flags.DEFINE_string('img_path', 'inference/test.png', 'Image to run')
 flags.DEFINE_string(
     'json_path', None,
     'If specified, uses the openpose output to crop the image.')
@@ -88,9 +88,8 @@ def main(img_path, json_path=None):
     PhotoWakeUpDepthMaps.visualize(img, proc_param, joints[0], verts[0], cams[0], img_path)
     PhotoWakeUpWeights.visualize(img, proc_param, joints[0], verts[0], weights[0], cams[0], img_path)
 
-    print(theta)
     theta_out = theta.tolist()
-    with open('results/HMR_value_out.json', 'w') as outfile: 
+    with open('results/PhotoWakeUp.json', 'w') as outfile: 
 	    json.dump([theta_out], outfile)
 
 if __name__ == '__main__':
