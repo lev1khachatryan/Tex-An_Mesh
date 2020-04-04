@@ -59,7 +59,7 @@ class HMRTrainer(object):
         self.max_epoch = config.epoch
 
         self.num_cam = 3
-        # self.proj_fn = batch_orth_proj_idrot
+        self.proj_fn = batch_orth_proj_idrot
 
         self.num_theta = 72  # 24 * 3
         self.total_params = self.num_theta + self.num_cam + 10
@@ -74,17 +74,16 @@ class HMRTrainer(object):
         # First make sure data_format is right
         if self.data_format == 'NCHW':
             # B x H x W x 3 --> B x 3 x H x W
-            data_loader['image'] = tf.transpose(data_loader['image'],[0, 3, 1, 2])
+            data_loader['image'] = tf.transpose(data_loader['image'],
+                                                [0, 3, 1, 2])
 
         self.image_loader = data_loader['image']
         self.kp_loader = data_loader['label']
 
         if self.use_3d_label:
             self.poseshape_loader = data_loader['label3d']
-
-            # data_loader['has3d']  is indicator for existence of [3D joints, 3D SMPL] labels B x 2
-			#      					Note 3D SMPL is only available for H3.6M.
-
+            # image_loader[3] is N x 2, first column is 3D_joints gt existence,
+            # second column is 3D_smpl gt existence
             self.has_gt3d_joints = data_loader['has3d'][:, 0]
             self.has_gt3d_smpl = data_loader['has3d'][:, 1]
 
@@ -247,13 +246,15 @@ class HMRTrainer(object):
             shapes = theta_here[:, (self.num_cam + self.num_theta):]
             # Rs_wglobal is Nx24x3x3 rotation matrices of poses
             verts, Js, pred_Rs = self.smpl(shapes, poses, get_skin=True)
-            pred_kp = batch_orth_proj_idrot( Js, cams, name='proj2d_stage%d' % i)
-            
+            pred_kp = batch_orth_proj_idrot(
+                Js, cams, name='proj2d_stage%d' % i)
             # --- Compute losses:
-            loss_kps.append(self.e_loss_weight * self.keypoint_loss(self.kp_loader, pred_kp))
+            loss_kps.append(self.e_loss_weight * self.keypoint_loss(
+                self.kp_loader, pred_kp))
             pred_Rs = tf.reshape(pred_Rs, [-1, 24, 9])
             if self.use_3d_label:
-                loss_poseshape, loss_joints = self.get_3d_loss(pred_Rs, shapes, Js)
+                loss_poseshape, loss_joints = self.get_3d_loss(
+                    pred_Rs, shapes, Js)
                 loss_3d_params.append(loss_poseshape)
                 loss_3d_joints.append(loss_joints)
 
@@ -379,44 +380,43 @@ class HMRTrainer(object):
         self.summary_op_always = tf.summary.merge(always_report)
 
     def setup_discriminator(self, fake_rotations, fake_shapes):
-	    # Compute the rotation matrices of "real" pose.
-	    # They are axis-angle representations, 24 x 3.
-	    real_rotations = batch_rodrigues(tf.reshape(self.pose_loader, [-1, 3]))
-	    real_rotations = tf.reshape(real_rotations, [-1, 24, 9])
-	    # Ignoring global rotation. N x 23*9
-	    # The # of real rotation is B*num_stage so it's balanced.
-	    real_rotations = real_rotations[:, 1:, :]
-	    all_fake_rotations = tf.reshape(
-	        tf.concat(fake_rotations, 0),
-	        [self.batch_size * self.num_stage, -1, 9])
-	    comb_rotations = tf.concat(
-	        [real_rotations, all_fake_rotations], 0, name="combined_pose")
-	    comb_rotations = tf.expand_dims(comb_rotations, 2)
-	    # comb_rotations is (6*B, 23, 1, 9)
+        # Compute the rotation matrices of "rea" pose.
+        # These guys are in 24 x 3.
+        real_rotations = batch_rodrigues(tf.reshape(self.pose_loader, [-1, 3]))
+        real_rotations = tf.reshape(real_rotations, [-1, 24, 9])
+        # Ignoring global rotation. N x 23*9
+        # The # of real rotation is B*num_stage so it's balanced.
+        real_rotations = real_rotations[:, 1:, :]
+        all_fake_rotations = tf.reshape(
+            tf.concat(fake_rotations, 0),
+            [self.batch_size * self.num_stage, -1, 9])
+        comb_rotations = tf.concat(
+            [real_rotations, all_fake_rotations], 0, name="combined_pose")
 
-	    all_fake_shapes = tf.concat(fake_shapes, 0)
-	    comb_shapes = tf.concat(
-	        [self.shape_loader, all_fake_shapes], 0, name="combined_shape")
-	    # comb_shapes is (6*B, 10)
+        comb_rotations = tf.expand_dims(comb_rotations, 2)
+        all_fake_shapes = tf.concat(fake_shapes, 0)
+        comb_shapes = tf.concat(
+            [self.shape_loader, all_fake_shapes], 0, name="combined_shape")
 
-	    disc_input = {
-	        'weight_decay': self.d_wd,
-	        'shapes': comb_shapes,
-	        'poses': comb_rotations
-	    }
+        disc_input = {
+            'weight_decay': self.d_wd,
+            'shapes': comb_shapes,
+            'poses': comb_rotations
+        }
 
-	    self.d_out, self.D_var = Discriminator_separable_rotations(**disc_input)
+        self.d_out, self.D_var = Discriminator_separable_rotations(
+            **disc_input)
 
-	    self.d_out_real, self.d_out_fake = tf.split(self.d_out, 2)
-	    # Compute losses:
-	    with tf.name_scope("comp_d_loss"):
-	        self.d_loss_real = tf.reduce_mean(
-	            tf.reduce_sum((self.d_out_real - 1)**2, axis=1))
-	        self.d_loss_fake = tf.reduce_mean(
-	            tf.reduce_sum((self.d_out_fake)**2, axis=1))
-	        # Encoder loss
-	        self.e_loss_disc = tf.reduce_mean(
-	            tf.reduce_sum((self.d_out_fake - 1)**2, axis=1))
+        self.d_out_real, self.d_out_fake = tf.split(self.d_out, 2)
+        # Compute losses:
+        with tf.name_scope("comp_d_loss"):
+            self.d_loss_real = tf.reduce_mean(
+                tf.reduce_sum((self.d_out_real - 1)**2, axis=1))
+            self.d_loss_fake = tf.reduce_mean(
+                tf.reduce_sum((self.d_out_fake)**2, axis=1))
+            # Encoder loss
+            self.e_loss_disc = tf.reduce_mean(
+                tf.reduce_sum((self.d_out_fake - 1)**2, axis=1))
 
     def get_3d_loss(self, Rs, shape, Js):
         """
