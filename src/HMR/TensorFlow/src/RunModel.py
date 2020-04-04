@@ -129,7 +129,7 @@ class RunModel(object):
 
     def prepare(self):
         print('Restoring checkpoint %s..' % self.load_path)
-        self.saver.restore(self.sess, self.load_path)
+        self.saver.restore(self.sess, self.load_path)        
         self.mean_value = self.sess.run(self.mean_var)
             
     def predict(self, images, get_theta=False):
