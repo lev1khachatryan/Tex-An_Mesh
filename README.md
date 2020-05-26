@@ -24,9 +24,9 @@ Unlike existing methods, which give partially textured meshes or synthesize the 
 
 ## Results
 
-Peter Dinklage             |  Vladimir Putin
+Peter Dinklage             |  Vladimir Putin  |  cristiano ronaldo
 :-------------------------:|:-------------------------:
-![](https://github.com/lev1khachatryan/Tex-An_Mesh/blob/master/assets/dinklage.gif)  |  ![](https://github.com/lev1khachatryan/Tex-An_Mesh/blob/master/assets/putin.gif)
+![](https://github.com/lev1khachatryan/Tex-An_Mesh/blob/master/assets/dinklage.gif)  |  ![](https://github.com/lev1khachatryan/Tex-An_Mesh/blob/master/assets/putin.gif)  |  ![](https://github.com/lev1khachatryan/Tex-An_Mesh/blob/master/assets/ronaldo.gif)
 
 
 <br>
