@@ -27,6 +27,19 @@ The method consists of three stages:
 2. Textured mesh reconstruction
 3. Mesh alignment and rigging
 
+### SMPL mesh reconstruction
+
+Human mesh recovery is a method for predicting the shape and pose parameters for the SMPL model, from a single image. From shape
+and pose parameters we can reconstruct the SMPL mesh.
+
+The overall HMR method work is shown in figure 3.
+
+![Alt text](https://github.com/lev1khachatryan/Tex-An_Mesh/blob/master/assets/3.jpg)
+**Figure 3**: Overview of HMR method. At first, the image is passed through an encoder which is ResNet-50, the encoded image is used by an Iterative regression module that infers the 3D representation by minimizing the joint reprojection error. Discriminator controls the regression module to predict real human shape and pose parameters.
+
+During training, this method assumes that we have ground truth 2D joints $x \in R^{2 \times K} . Then joint reprojection error will be:
+
+
 <br>
 <br>
 <br>
