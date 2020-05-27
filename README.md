@@ -6,7 +6,9 @@ We provide a method that will surely excite every Potterhead on the planet. As w
 ![Alt text](https://github.com/lev1khachatryan/Tex-An_Mesh/blob/master/assets/1.jpg)
 **Figure 1**: Given a single photo as input (far left), we create a 3D animated version of the subject, which can now walk towards the viewer (middle).
 
-In this project, we address the problem of reconstructing a fully textured and animatable human body mesh from only a single image. It has many applications ranging from virtual and augmented reality to the production of movies and video games. Our contributions are the following:
+In this project, we address the problem of reconstructing a fully textured and animatable human body mesh from only a single image. It has many applications ranging from virtual and augmented reality to the production of movies and video games. 
+
+Our contributions are the following:
 
 * we obtain a fully textured and animatable mesh by combining textured mesh and SMPL predictions,
 
@@ -20,7 +22,7 @@ Given a single image, our goal is to reconstruct the underlying 3D fully texture
 ![Alt text](https://github.com/lev1khachatryan/Tex-An_Mesh/blob/master/assets/2.jpg)
 **Figure 2**: Overview of our method.
 
-Unlike existing methods, which give partially textured meshes or synthesize the back regions based on frontal views, our approach, owing to PIFu, gives fully textured mesh.
+***Unlike existing methods, which give partially textured meshes or synthesize the back regions based on frontal views, our approach, owing to PIFu, gives fully textured mesh.***
 
 ## Results
 
@@ -28,6 +30,8 @@ Peter Dinklage             |  Vladimir Putin
 :-------------------------:|:-------------------------:
 ![](https://github.com/lev1khachatryan/Tex-An_Mesh/blob/master/assets/dinklage.gif)  |  ![](https://github.com/lev1khachatryan/Tex-An_Mesh/blob/master/assets/putin.gif)
 
+
+You can find the documentation of the project [here](https://github.com/lev1khachatryan/Tex-An_Mesh/blob/master/DOCUMENTATION.pdf)
 
 <br>
 <br>
