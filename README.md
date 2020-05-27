@@ -31,7 +31,7 @@ Peter Dinklage             |  Vladimir Putin
 ![](https://github.com/lev1khachatryan/Tex-An_Mesh/blob/master/assets/dinklage.gif)  |  ![](https://github.com/lev1khachatryan/Tex-An_Mesh/blob/master/assets/putin.gif)
 
 
-You can find the documentation of the project [here](https://github.com/lev1khachatryan/Tex-An_Mesh/blob/master/DOCUMENTATION.pdf)
+#### You can find the documentation of the project [here](https://github.com/lev1khachatryan/Tex-An_Mesh/blob/master/DOCUMENTATION.pdf)
 
 <br>
 <br>
