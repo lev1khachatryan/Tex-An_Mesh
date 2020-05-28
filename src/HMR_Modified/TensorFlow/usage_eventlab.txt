@@ -1,7 +1,0 @@
-
-python2 -m PhotoWakeUp --img_path /home/event/PhotoWakeUp/color.png
-
-This will generate output images in the same folder than the input image
-
-
-

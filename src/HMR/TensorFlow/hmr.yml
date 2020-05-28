@@ -1,6 +1,0 @@
-name: hmr
-dependencies:
-  - opencv
-  - tensorflow-gpu
-  - vispy
-  - pyqt
