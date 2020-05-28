@@ -17,10 +17,12 @@ Our contributions are the following:
 
 ## Method
 
-Given a single image, our goal is to reconstruct the underlying 3D fully textured and rigged mesh of the human body. The overall system works as shown in figure 2. At first, we apply state-of-the-art algorithms to perform person segmentation and image inpainting. Then we use human mesh recovery (HMR) method to obtain shape and pose parameters for the SMPL model. For textured mesh reconstruction we use pixel aligned implicit function (PIFu). Finally, obtained two meshes are aligned to get skeleton and blend weight for textured mesh.
+Given a single image, our goal is to reconstruct the underlying 3D fully textured and rigged mesh of the human body. The overall system works as shown in figure 2.
 
 ![Alt text](https://github.com/lev1khachatryan/Tex-An_Mesh/blob/master/assets/2.jpg)
 **Figure 2**: Overview of our method.
+
+At first, we apply [person segmentation algorithms](https://github.com/lev1khachatryan/Tex-An_Mesh/blob/master/method/1_person_segmentation) to to get foreground object. Then we use human mesh recovery (HMR) method to obtain shape and pose parameters for the [SMPL model](https://github.com/lev1khachatryan/Tex-An_Mesh/blob/master/method/2_mesh_reconstruction/1_smpl_mesh_with_hmr). For [textured mesh](https://github.com/lev1khachatryan/Tex-An_Mesh/blob/master/method/2_mesh_reconstruction/2_textured_mesh_with_pifu) reconstruction we use pixel aligned implicit function (PIFu). Finally, obtained two meshes are [aligned](https://github.com/lev1khachatryan/Tex-An_Mesh/blob/master/method/2_mesh_reconstruction/3_mesh_alignment) to get skeleton and blend weight for textured mesh. After we have animatable and textured mesh, we need [background image](https://github.com/lev1khachatryan/Tex-An_Mesh/blob/master/method/3_image_inpainting), on which [animation](https://github.com/lev1khachatryan/Tex-An_Mesh/blob/master/method/4_animation) will be constructed (we use pure openGL for animation).
 
 ***Unlike existing methods, which give partially textured meshes or synthesize the back regions based on frontal views, our approach, owing to PIFu, gives fully textured mesh.***
 
